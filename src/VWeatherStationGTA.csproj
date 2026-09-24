@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>VWeatherStationGTA</AssemblyName>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- ScriptHookVDotNet3 API (referenced from NuGet for the build) -->
+    <PackageReference Include="ScriptHookVDotNet3" Version="3.6.0" />
+  </ItemGroup>
+</Project>
