@@ -7,7 +7,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
+    <!-- ScriptHookVDotNet3 API (GTA/GTA.Math/GTA.UI namespaces) -->
     <PackageReference Include="ScriptHookVDotNet3" Version="3.6.0" />
+    <!-- System.Net.Http (HttpClient) is a .NET Framework assembly in net48;
+         it must be referenced explicitly or CS0234/CS0246 occur. -->
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 </Project>

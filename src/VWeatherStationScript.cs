@@ -105,28 +105,27 @@ public class VWeatherStationScript : Script
     {
         try
         {
-            var url = _cfg.ApiBaseUrl + "/game-weather?lat=" + _cfg.RealWeatherLat.ToString(System.Globalization.CultureInfo.InvariantCulture)
-                    + "&lon=" + _cfg.RealWeatherLon.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            var res = await GetString(url);
-            var cond = JsonStr(res, "condition");   // clear|cloudy|overcast|fog|drizzle|rain|thunderstorm|snow
+            var ci = System.Globalization.CultureInfo.InvariantCulture;
+            var url = _cfg.ApiBaseUrl + "/game-weather?lat=" + _cfg.RealWeatherLat.ToString(ci)
+                    + "&lon=" + _cfg.RealWeatherLon.ToString(ci);
+            var res = await GetJson(url);
+            var cond = JsonStr(res, "condition");
             var isDay = JsonStr(res, "is_day");
             if (cond == null) return;
-            // map the real-world condition to a GTA V weather type, and stash
-            // it to be applied on the game thread (next tick).
-            _pendingRealWeather = MapRealToGta(cond, isDay == "1");
+            _pendingRealWeather = MapRealToGta(cond, isDay == "1" || isDay == "true");
         }
         catch (Exception ex) { Log("PullRealWeather failed: " + ex.Message); }
     }
 
-    // map our simple condition -> GTA V Weather enum name
+    // map a real-world condition to a valid SHVDN3 Weather enum name
     private string MapRealToGta(string cond, bool isDay)
     {
         switch (cond)
         {
-            case "thunderstorm": return "Thunder";
+            case "thunderstorm": return "ThunderStorm";
             case "rain":         return "Raining";
             case "drizzle":      return "Clearing";
-            case "snow":         return "Snow";
+            case "snow":         return "Snowing";
             case "fog":          return "Foggy";
             case "overcast":     return "Overcast";
             case "cloudy":       return "Clouds";
@@ -166,7 +165,7 @@ public class VWeatherStationScript : Script
         {
             var w = World.Weather.ToString().ToUpperInvariant();
             var nw = World.NextWeather.ToString().ToUpperInvariant();
-            var trans = World.WeatherTransition;      // 0..1
+            var trans = 0f;  // SHVDN3 has no WeatherTransition getter; report 0
             var t = World.CurrentTimeOfDay;           // TimeSpan
             Vector3 pos = Game.Player.Character.Position;
             float heading = Game.Player.Character.Heading;
@@ -226,12 +225,6 @@ public class VWeatherStationScript : Script
     }
 
     // ---- tiny HTTP + JSON helpers --------------------------------------
-    private async Task<string> GetString(string url)
-    {
-        var resp = await _http.GetAsync(url);
-        return await resp.Content.ReadAsStringAsync();
-    }
-
     private async Task<string> PostJson(string url, string json)
     {
         var content = new StringContent(json, Encoding.UTF8, "application/json");

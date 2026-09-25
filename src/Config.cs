@@ -14,12 +14,10 @@ public class Config
     public bool   TelemetryEnabled        = true;
     public int    TelemetryIntervalSeconds = 2;
     public bool   RemoteWeather           = true;
-    // Pull REAL-WORLD weather into the game: when enabled, the plugin fetches
-    // live weather for RealWeatherLat/Lon and sets GTA's weather to match.
-    public bool   PullRealWeather         = false;
-    public double RealWeatherLat          = 51.5074;   // default: London
+    public bool   PullRealWeather         = false;      // bring real-world weather INTO the game
+    public double RealWeatherLat          = 51.5074;
     public double RealWeatherLon          = -0.1278;
-    public int    RealWeatherIntervalSeconds = 600;    // refresh every 10 min
+    public int    RealWeatherIntervalSeconds = 600;
     public string SiteUrl                 = "https://vweatherstation.com";
     public string ApiBaseUrl              = "https://vweatherstation.com/api/v1";
 
@@ -43,7 +41,7 @@ public class Config
             c.Enabled                  = GetBool(map, "Enabled", c.Enabled);
             c.TelemetryEnabled         = GetBool(map, "TelemetryEnabled", c.TelemetryEnabled);
             c.TelemetryIntervalSeconds = GetInt(map, "TelemetryIntervalSeconds", c.TelemetryIntervalSeconds);
-c.RemoteWeather            = GetBool(map, "RemoteWeather", c.RemoteWeather);
+            c.RemoteWeather            = GetBool(map, "RemoteWeather", c.RemoteWeather);
             c.PullRealWeather          = GetBool(map, "PullRealWeather", c.PullRealWeather);
             c.RealWeatherLat           = GetDouble(map, "RealWeatherLat", c.RealWeatherLat);
             c.RealWeatherLon           = GetDouble(map, "RealWeatherLon", c.RealWeatherLon);
@@ -81,4 +79,6 @@ RemoteWeather=true
         => m.ContainsKey(k) ? (m[k].Equals("true", StringComparison.OrdinalIgnoreCase) || m[k] == "1") : d;
     private static int GetInt(Dictionary<string, string> m, string k, int d)
         => m.ContainsKey(k) && int.TryParse(m[k], out int v) ? v : d;
+    private static double GetDouble(Dictionary<string, string> m, string k, double d)
+        => m.ContainsKey(k) && double.TryParse(m[k], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double v) ? v : d;
 }
