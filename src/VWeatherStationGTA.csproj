@@ -4,9 +4,10 @@
     <LangVersion>latest</LangVersion>
     <AssemblyName>VWeatherStationGTA</AssemblyName>
     <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <!-- ScriptHookVDotNet3 API (referenced from NuGet for the build) -->
     <PackageReference Include="ScriptHookVDotNet3" Version="3.6.0" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
 </Project>
