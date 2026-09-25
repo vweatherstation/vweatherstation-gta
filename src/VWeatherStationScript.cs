@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using GTA;                 // ScriptHookVDotNet v3
 using GTA.Math;
 using GTA.UI;
-using Newtonsoft.Json;     // add via NuGet if you want JSON helpers, or hand-roll
 
 public class VWeatherStationScript : Script
 {
